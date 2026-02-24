@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+
+  mongodb:
+    image: mongo:6
+    container_name: mongo_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  backend:
+    image: omkarojha/mean-backend:1.0
+    container_name: node_backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URL: mongodb://mongodb:27017/tutorials
+
+  frontend:
+    image: omkarojha/mean-frontend:1.0
+    container_name: angular_frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:
